@@ -15,9 +15,9 @@ def show_home():
     col1, col2 = st.columns(2)
     with col1:
         if st.button("Offer a Ride"):
-            st.switch_page("pages/offer_a_ride.py")
+            st.query_params["page"] = "Offer"
     with col2:
         if st.button("Request a Ride"):
-            st.switch_page("pages/request_a_ride.py")
+            st.query_params["page"] = "Request"
  
     st.info("Use the navigation bar above to explore other sections.")
