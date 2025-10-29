@@ -2,7 +2,6 @@ import streamlit as st
 from auth.auth_util import authenticate_user, save_user
  
 def show_auth_page():
-    """Streamlit login/signup page using your auth utils."""
     st.title("CarPoolConnect")
     st.subheader("Log in or sign up to start sharing rides")
  
@@ -48,4 +47,3 @@ def show_auth_page():
             st.session_state.clear()
             st.success("You’ve been logged out.")
             st.rerun()
- 

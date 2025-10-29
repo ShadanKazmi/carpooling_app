@@ -11,7 +11,6 @@ from utils.ride_utils import (
  
 
 def fetch_routes():
-    """Fetch all available routes from the database."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -25,7 +24,6 @@ def fetch_routes():
         conn.close()
  
 def accept_ride_request(driver_id, request_id):
-    """Driver accepts a passenger ride request."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -100,7 +98,7 @@ def accept_ride_request(driver_id, request_id):
 
 def show():
     navbar()
-    st.title("Offer a Ride 🚗")
+    st.title("Offer a Ride")
     st.write("Drivers can create ride offers and view passenger ride requests here.")
  
     user = st.session_state.get("user")
@@ -113,7 +111,7 @@ def show():
         st.warning("Driver profile not found. Please register as a driver.")
         st.stop()
  
-    st.header("📋 Passenger Ride Requests")
+    st.header("Passenger Ride Requests")
  
     requests = get_open_ride_requests()
     if requests:
@@ -126,7 +124,7 @@ def show():
                 st.markdown(f"**Preferences:** {req['preferences']}")
                 st.markdown(f"**Status:** {req['status']}")
  
-                if st.button(f"✅ Accept Request #{req['request_id']}", key=f"accept_{req['request_id']}"):
+                if st.button(f"Accept Request #{req['request_id']}", key=f"accept_{req['request_id']}"):
                     success = accept_ride_request(driver_id, req["request_id"])
                     if success:
                         st.success("Ride request accepted! Passenger will be notified.")
@@ -137,7 +135,7 @@ def show():
  
     st.markdown("---")
  
-    st.header("📝 Create a Ride Offer")
+    st.header("Create a Ride Offer")
  
     routes = fetch_routes()
     if not routes:

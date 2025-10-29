@@ -4,7 +4,6 @@ import pymysql
 from utils.db_connection import get_connection
 
 def get_driver_id(user_id):
-    """Fetch the driver's ID using the linked user_id."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -19,7 +18,6 @@ def get_driver_id(user_id):
         conn.close()
 
 def fetch_routes():
-    """Fetch all available routes."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -34,7 +32,6 @@ def fetch_routes():
         conn.close()
 
 def create_ride_request(passenger_id, from_city, to_city, date_time, passengers_count, preferences):
-    """Create a new ride request from a passenger."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -65,7 +62,6 @@ def create_ride_request(passenger_id, from_city, to_city, date_time, passengers_
  
 
 def create_ride_offer(driver_id, vehicle_no, route_id, available_seats, price_per_km, estimated_fare):
-    """Create a new ride offer by a driver."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -96,7 +92,6 @@ def create_ride_offer(driver_id, vehicle_no, route_id, available_seats, price_pe
  
 
 def get_open_ride_requests():
-    """Fetch all ride requests that are not yet matched."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -113,7 +108,6 @@ def get_open_ride_requests():
  
 
 def get_open_ride_offers():
-    """Fetch all open ride offers with route information."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:

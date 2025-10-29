@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 load_dotenv()
  
 def get_connection():
-    """Create and return a single MySQL connection object."""
     try:
         connection = pymysql.connect(
             host=os.getenv("DB_HOST"),

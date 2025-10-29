@@ -8,7 +8,6 @@ import time
  
  
 def fetch_route_cities():
-    """Fetch distinct from_city and to_city from routes table."""
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
     try:

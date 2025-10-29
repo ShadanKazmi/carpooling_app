@@ -1,7 +1,6 @@
 from utils.db_connection import get_connection
  
 def execute_query(query, params=None):
-    """Run INSERT, UPDATE, DELETE queries."""
     conn, cursor = get_connection()
     if not conn:
         return False
@@ -16,7 +15,6 @@ def execute_query(query, params=None):
         conn.close()
  
 def fetch_one(query, params=None):
-    """Fetch a single record."""
     conn, cursor = get_connection()
     if not conn:
         return None
@@ -31,7 +29,6 @@ def fetch_one(query, params=None):
         conn.close()
  
 def fetch_all(query, params=None):
-    """Fetch multiple records."""
     conn, cursor = get_connection()
     if not conn:
         return []

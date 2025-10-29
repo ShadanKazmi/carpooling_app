@@ -10,20 +10,17 @@ def get_cursor():
     return conn, conn.cursor()
  
 def hash_password(password: str) -> str:
-    """Hashes password securely using bcrypt"""
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed.decode('utf-8')
  
 def check_password(password: str, hashed: str) -> bool:
-    """Verifies password against stored bcrypt hash"""
     try:
         return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
     except ValueError:
         return False
  
 def load_users() -> dict:
-    """Load all users into a dictionary"""
     conn, cursor = get_cursor()
     if not conn or not cursor:
         return {}
@@ -35,7 +32,6 @@ def load_users() -> dict:
     return users
  
 def save_user(name: str, email: str, password: str, role: str) -> bool:
-    """Registers a new user and inserts into role-specific table."""
     conn, cursor = get_cursor()
     if not conn or not cursor:
         return False
@@ -70,7 +66,6 @@ def save_user(name: str, email: str, password: str, role: str) -> bool:
         conn.close()
  
 def authenticate_user(email: str, password: str):
-    """Checks user credentials and returns user data if valid."""
     conn, cursor = get_cursor()
     if not conn or not cursor:
         return None
@@ -86,7 +81,6 @@ def authenticate_user(email: str, password: str):
     return None
  
 def update_last_login(user_id: int):
-    """Updates last login timestamp for a user."""
     conn, cursor = get_cursor()
     if not conn or not cursor:
         return

@@ -1,14 +1,3 @@
-"""
-generate_routes_dataset_graphhopper.py
- 
-Fixed script to fetch pairwise routes from GraphHopper and save to JSON.
-Key fixes:
-- Use repeated query parameters for 'point' (requests supports a list of tuples)
-- Save progress incrementally to resume on failures
-- Retry with exponential backoff on transient errors
-- Respect polite delays to avoid rate limits
-"""
-
 import requests
 import json
 import time
@@ -70,10 +59,6 @@ def finalize_output(tmp_path=TMP_OUTPUT, out_path=OUTPUT_FILE):
         print("No progress file to finalize.")
  
 def get_route(lat1, lon1, lat2, lon2, vehicle="car"):
-    """
-    Uses repeated 'point' parameters. Returns dict or None.
-    Note: We set points_encoded=False so response.points.coordinates is [lon, lat] pairs.
-    """
     params = [
         ("point", f"{lat1},{lon1}"),
         ("point", f"{lat2},{lon2}"),
@@ -173,7 +158,7 @@ def main():
     print("Done.")
  
 if __name__ == "__main__":
-    if API_KEY == "YOUR_API_KEY_HERE" or not API_KEY:
+    if API_KEY == "" or not API_KEY:
         print("Please set your GraphHopper API key in the GRAPHHOPPER_API_KEY env var or edit the script.")
     else:
         main()
