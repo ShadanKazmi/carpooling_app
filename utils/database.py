@@ -10,7 +10,7 @@ def execute_query(query, params=None):
         conn.commit()
         return True
     except Exception as e:
-        print("❌ Error executing query:", e)
+        print("Error executing query:", e)
         return False
     finally:
         conn.close()
@@ -25,7 +25,7 @@ def fetch_one(query, params=None):
         result = cursor.fetchone()
         return result
     except Exception as e:
-        print("❌ Error fetching record:", e)
+        print("Error fetching record:", e)
         return None
     finally:
         conn.close()
@@ -40,7 +40,7 @@ def fetch_all(query, params=None):
         results = cursor.fetchall()
         return results
     except Exception as e:
-        print("❌ Error fetching all records:", e)
+        print("Error fetching all records:", e)
         return []
     finally:
         conn.close()

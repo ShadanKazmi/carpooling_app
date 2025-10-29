@@ -12,7 +12,7 @@ def get_driver_id(user_id):
         result = cursor.fetchone()
         return result["driver_id"] if result else None
     except Exception as e:
-        print("❌ Error fetching driver_id:", e)
+        print("Error fetching driver_id:", e)
         return None
     finally:
         cursor.close()
@@ -27,7 +27,7 @@ def fetch_routes():
         cursor.execute(query)
         return cursor.fetchall()
     except Exception as e:
-        print("❌ Error fetching routes:", e)
+        print("Error fetching routes:", e)
         return []
     finally:
         cursor.close()
@@ -56,7 +56,7 @@ def create_ride_request(passenger_id, from_city, to_city, date_time, passengers_
         conn.commit()
         return True
     except Exception as e:
-        print("❌ Error creating ride request:", e)
+        print("Error creating ride request:", e)
         conn.rollback()
         return False
     finally:
@@ -87,7 +87,7 @@ def create_ride_offer(driver_id, vehicle_no, route_id, available_seats, price_pe
         conn.commit()
         return True
     except Exception as e:
-        print("❌ Error creating ride offer:", e)
+        print("Error creating ride offer:", e)
         conn.rollback()
         return False
     finally:
@@ -105,7 +105,7 @@ def get_open_ride_requests():
         )
         return cursor.fetchall()
     except Exception as e:
-        print("❌ Error fetching open ride requests:", e)
+        print("Error fetching open ride requests:", e)
         return []
     finally:
         cursor.close()
@@ -128,7 +128,7 @@ def get_open_ride_offers():
         cursor.execute(query)
         return cursor.fetchall()
     except Exception as e:
-        print("❌ Error fetching open ride offers:", e)
+        print("Error fetching open ride offers:", e)
         return []
     finally:
         cursor.close()

@@ -30,7 +30,7 @@ for route in routes_data:
         to_city = route.get("to_city")
         distance_km = route.get("distance_km")
         duration_min = route.get("duration_min")
-        coordinates = json.dumps(route.get("coordinates_lonlat"))  # store as JSON string
+        coordinates = json.dumps(route.get("coordinates_lonlat"))  
         created_at = datetime.datetime.now()
  
         cursor.execute(insert_query, (from_city, to_city, distance_km, duration_min, coordinates, created_at))
