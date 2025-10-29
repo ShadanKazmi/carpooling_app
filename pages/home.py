@@ -3,6 +3,7 @@ from components.navbar import navbar
 
 
 def home():
+    
     navbar()
 
     query_params = st.query_params

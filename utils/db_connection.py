@@ -16,8 +16,8 @@ def get_connection():
             cursorclass=DictCursor,
             autocommit=True
         )
-        print("✅ Database connection established successfully.")
+        print("Database connection established successfully.")
         return connection
     except pymysql.MySQLError as e:
-        print("❌ Error connecting to MySQL:", e)
+        print("Error connecting to MySQL:", e)
         return None
