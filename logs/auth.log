@@ -1,0 +1,8 @@
+2025-10-29 11:57:02 - INFO - Called login_user with args: adityasharma@11, 12345678
+2025-10-29 11:57:02 - INFO - login_user completed successfully
+2025-10-29 11:57:04 - INFO - Called register_user with args: adityasharma@11, adityasharma, 12345678
+2025-10-29 11:57:05 - INFO - register_user completed successfully
+2025-10-29 11:57:17 - INFO - Called register_user with args: aditya@11, aditya, 12345678
+2025-10-29 11:57:18 - INFO - register_user completed successfully
+2025-10-29 11:57:20 - INFO - Called login_user with args: aditya@11, 12345678
+2025-10-29 11:57:21 - INFO - login_user completed successfully
