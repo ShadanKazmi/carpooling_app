@@ -86,7 +86,7 @@ def home():
                 <p>Share rides, save money, and travel smarter across Indian cities.</p>
                 <div class="cta-buttons">
                     <a href="?page=Request"><button>📍 Request a Ride</button></a>
-                    <a href="?page=Offer"><button>🚘 Offer a Ride</button></a>
+                    <a href="?page=Offer"><button>Offer a Ride</button></a>
                 </div>
             </div>
             """,
@@ -97,19 +97,19 @@ def home():
             """
             <div class="features">
                 <div class="card">
-                    <h3>🧭 Smart Route Matching</h3>
+                    <h3>Smart Route Matching</h3>
                     <p>Automatically match passengers and drivers with optimal routes using real map data.</p>
                 </div>
                 <div class="card">
-                    <h3>💸 Fair Fare Calculation</h3>
+                    <h3>Fair Fare Calculation</h3>
                     <p>Transparent fare estimates based on distance, route safety, and number of passengers.</p>
                 </div>
                 <div class="card">
-                    <h3>🗺️ Safety Insights</h3>
+                    <h3>Safety Insights</h3>
                     <p>Get live updates on dangerous areas along your route and choose safer alternatives.</p>
                 </div>
                 <div class="card">
-                    <h3>⭐ Reliable Ratings</h3>
+                    <h3>Reliable Ratings</h3>
                     <p>Track performance and trust through a rating system for both drivers and passengers.</p>
                 </div>
             </div>
@@ -126,15 +126,15 @@ def home():
         st.info("Offer a ride page coming soon!")
     
     elif page == "Rides":
-        st.title("🕓 My Rides")
+        st.title("My Rides")
         st.info("View your active and past rides here.")
     
     elif page == "Profile":
-        st.title("👤 Your Profile")
+        st.title("Your Profile")
         st.info("Profile page coming soon!")
     
     elif page == "Map":
-        st.title("🗺️ Route and Dangerous Area Map")
+        st.title("Route and Dangerous Area Map")
         st.info("Interactive map integration coming soon!")
     
     else:

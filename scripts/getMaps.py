@@ -19,10 +19,9 @@ API_KEY = 'd4bb4356-607f-46a8-ba93-5f16fe3dca3b'
 BASE_URL = "https://graphhopper.com/api/1/route"
 OUTPUT_FILE = "static_routes_dataset.json"
 TMP_OUTPUT = "static_routes_dataset_progress.json"
-SLEEP_BETWEEN_REQS = 1.0  # seconds
+SLEEP_BETWEEN_REQS = 1.0 
 MAX_RETRIES = 4
  
-# Cities dictionary: name -> (lat, lon)
 cities = {
     # Maharashtra
     "Mumbai": (19.0760, 72.8777),
@@ -75,25 +74,22 @@ def get_route(lat1, lon1, lat2, lon2, vehicle="car"):
     Uses repeated 'point' parameters. Returns dict or None.
     Note: We set points_encoded=False so response.points.coordinates is [lon, lat] pairs.
     """
-    # Build params as a list of tuples so 'point' is repeated in query string
     params = [
         ("point", f"{lat1},{lon1}"),
         ("point", f"{lat2},{lon2}"),
         ("vehicle", vehicle),
         ("locale", "en"),
         ("key", API_KEY),
-        ("points_encoded", "false")  # request coords as JSON (not encoded string)
+        ("points_encoded", "false") 
     ]
  
     for attempt in range(1, MAX_RETRIES + 1):
         try:
             resp = requests.get(BASE_URL, params=params, timeout=30)
-            # raise for status code errors (4xx/5xx)
             resp.raise_for_status()
             data = resp.json()
  
             if "paths" not in data or not data["paths"]:
-                # GraphHopper returns a helpful 'message' sometimes
                 msg = data.get("message", data)
                 raise RuntimeError(f"Invalid response (no paths): {msg}")
  
@@ -101,16 +97,14 @@ def get_route(lat1, lon1, lat2, lon2, vehicle="car"):
             distance_km = round(path["distance"] / 1000.0, 3)
             duration_min = round(path["time"] / 60000.0, 3)
  
-            # coordinates come as [lon, lat] pairs if points_encoded=false
             coords = path.get("points", {}).get("coordinates", None)
             if coords is None:
-                # Fallback: if encoded, provide overview polyline (not expected because we requested false)
                 coords = []
  
             return {
                 "distance_km": distance_km,
                 "duration_min": duration_min,
-                "coordinates_lonlat": coords  # explicit name to avoid confusion
+                "coordinates_lonlat": coords 
             }
  
         except requests.exceptions.RequestException as e:
@@ -118,23 +112,19 @@ def get_route(lat1, lon1, lat2, lon2, vehicle="car"):
             print(f"RequestException on attempt {attempt}/{MAX_RETRIES}: {e}. Retrying in {wait}s...")
             time.sleep(wait)
         except RuntimeError as e:
-            # Non-transient error from API (e.g., not routable)
             print(f"Runtime error for route ({lat1},{lon1}) -> ({lat2},{lon2}): {e}")
             return None
-    # If we exhausted retries
     print(f"Failed to fetch route after {MAX_RETRIES} attempts.")
     return None
  
 def main():
-    # Load progress if any
     routes = load_progress()
     seen_pairs = {(r["from_city"], r["to_city"]) for r in routes}
     city_items = list(cities.items())
     total_cities = len(city_items)
-    total_pairs = total_cities * (total_cities - 1)  # ordered pairs
+    total_pairs = total_cities * (total_cities - 1)
  
     counter = 1
-    # If resuming, set counter to number already fetched +1
     if routes:
         counter = len(routes) + 1
         print(f"Resuming from saved progress. Already have {len(routes)} routes.")
@@ -163,11 +153,9 @@ def main():
                 }
                 routes.append(entry)
                 seen_pairs.add((c1, c2))
-                # save progress after each successful fetch
                 save_progress(routes)
                 print(f"Saved route: {c1} -> {c2} ({result['distance_km']} km, {result['duration_min']} min)")
             else:
-                # Save a placeholder with status to mark failure (optional)
                 entry = {
                     "from_city": c1,
                     "to_city": c2,
@@ -181,7 +169,6 @@ def main():
             counter += 1
             time.sleep(SLEEP_BETWEEN_REQS)
  
-    # finalize
     finalize_output()
     print("Done.")
  

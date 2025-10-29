@@ -27,7 +27,7 @@ def fetch_routes():
  
 def show():
     navbar()
-    st.title("🚗 Offer a Ride")
+    st.title("Offer a Ride")
     st.write("Drivers can create ride offers and view passenger ride requests here.")
  
     user = st.session_state.get("user")
@@ -40,7 +40,7 @@ def show():
  
     if requests:
         for req in requests:
-            with st.expander(f"🧍 Ride Request #{req['request_id']} - {req['from_city']} → {req['to_city']}"):
+            with st.expander(f"Ride Request #{req['request_id']} - {req['from_city']} → {req['to_city']}"):
                 st.markdown(f"**From:** {req['from_city']}")
                 st.markdown(f"**To:** {req['to_city']}")
                 st.markdown(f"**Date & Time:** {req['date_time']}")
@@ -51,24 +51,23 @@ def show():
         st.info("No pending ride requests right now.")
  
     st.markdown("---")
-    st.header("🆕 Create a Ride Offer")
+    st.header("Create a Ride Offer")
  
     routes = fetch_routes()
     if not routes:
-        st.warning("⚠️ No routes available. Please add some routes first.")
+        st.warning("No routes available. Please add some routes first.")
         st.stop()
  
-    # --- Ride Offer Form ---
     with st.form("ride_offer_form"):
         st.subheader("Enter Ride Details")
         route_options = [f"{r['from_city']} → {r['to_city']} ({r['distance_km']} km)" for r in routes]
-        route_choice = st.selectbox("🚦 Route", route_options)
+        route_choice = st.selectbox("Route", route_options)
  
-        vehicle_no = st.text_input("🚘 Vehicle Number", placeholder="e.g. MH12AB1234")
-        available_seats = st.slider("🪑 Available Seats", 1, 6, 3)
-        price_per_km = st.number_input("💰 Price per KM (₹)", min_value=1.0, value=5.0, step=0.5)
+        vehicle_no = st.text_input("Vehicle Number", placeholder="e.g. MH12AB1234")
+        available_seats = st.slider("Available Seats", 1, 6, 3)
+        price_per_km = st.number_input("Price per KM (₹)", min_value=1.0, value=5.0, step=0.5)
  
-        submitted = st.form_submit_button("✅ Create Ride Offer")
+        submitted = st.form_submit_button("Create Ride Offer")
  
         if submitted:
             selected_route = routes[route_options.index(route_choice)]
@@ -78,7 +77,7 @@ def show():
  
             driver_id = get_driver_id(user["user_id"])
             if not driver_id:
-                st.error("❌ Driver profile not found. Please register as a driver.")
+                st.error("Driver profile not found. Please register as a driver.")
                 st.stop()
  
             success = create_ride_offer(
@@ -91,9 +90,9 @@ def show():
             )
  
             if success:
-                st.success("✅ Ride offer created successfully!")
+                st.success("Ride offer created successfully!")
             else:
-                st.error("❌ Failed to create ride offer. Please try again later.")
+                st.error("Failed to create ride offer. Please try again later.")
  
  
 if __name__ == "__main__":

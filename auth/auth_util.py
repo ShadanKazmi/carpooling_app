@@ -4,27 +4,26 @@ import datetime
 from utils.db_connection import get_connection
  
 def get_cursor():
-    """Return a fresh DB connection and cursor."""
     conn = get_connection()
     if not conn:
         return None, None
     return conn, conn.cursor()
  
 def hash_password(password: str) -> str:
-    """Hashes password securely using bcrypt."""
+    """Hashes password securely using bcrypt"""
     salt = bcrypt.gensalt()
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed.decode('utf-8')
  
 def check_password(password: str, hashed: str) -> bool:
-    """Verifies password against stored bcrypt hash."""
+    """Verifies password against stored bcrypt hash"""
     try:
         return bcrypt.checkpw(password.encode('utf-8'), hashed.encode('utf-8'))
     except ValueError:
         return False
  
 def load_users() -> dict:
-    """Load all users into a dictionary (email → user row)."""
+    """Load all users into a dictionary"""
     conn, cursor = get_cursor()
     if not conn or not cursor:
         return {}
@@ -52,7 +51,6 @@ def save_user(name: str, email: str, password: str, role: str) -> bool:
  
         user_id = cursor.lastrowid
  
-        # Insert into role-specific tables
         if role == "driver":
             cursor.execute("INSERT INTO drivers (user_id, avg_rating, total_rides) VALUES (%s, 0, 0)", (user_id,))
         elif role == "passenger":

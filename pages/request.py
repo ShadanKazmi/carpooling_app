@@ -27,13 +27,12 @@ def fetch_route_cities():
  
 def show():
     navbar()
-    st.title("🚖 Request a Ride")
+    st.title("Request a Ride")
     st.write("Find a comfortable and safe ride by sharing your trip details below.")
  
-    # --- Load routes dynamically ---
     from_cities, to_cities = fetch_route_cities()
     if not from_cities or not to_cities:
-        st.warning("⚠️ No routes available yet. Please import routes first.")
+        st.warning("No routes available yet. Please import routes first.")
         return
  
     with st.form("ride_request_form"):
@@ -41,13 +40,13 @@ def show():
  
         col1, col2 = st.columns(2)
         with col1:
-            from_city = st.selectbox("📍 From", from_cities)
+            from_city = st.selectbox("From", from_cities)
             date = st.date_input("📅 Date", datetime.now().date())
         with col2:
-            to_city = st.selectbox("🎯 To", to_cities)
-            time_input = st.time_input("⏰ Time", datetime.now().time())
+            to_city = st.selectbox("To", to_cities)
+            time_input = st.time_input("Time", datetime.now().time())
  
-        passengers = st.slider("👥 Passengers", 1, 6, 1)
+        passengers = st.slider("Passengers", 1, 6, 1)
  
         with st.expander("⚙️ Preferences"):
             col1, col2 = st.columns(2)
@@ -62,7 +61,6 @@ def show():
                 placeholder="Any special requirements or preferences..."
             )
  
-        # --- Form Submission ---
         if st.form_submit_button("🔍 Request Ride"):
             if from_city and to_city and date and time_input:
                 prefs = {
@@ -78,7 +76,6 @@ def show():
                     st.warning("Please log in to request a ride.")
                     st.stop()
  
-                # Create a ride request in the database
                 success = create_ride_request(
                     passenger_id=user["user_id"],
                     from_city=from_city,
@@ -89,18 +86,16 @@ def show():
                 )
  
                 if success:
-                    st.success("✅ Ride request created successfully!")
+                    st.success("Ride request created successfully!")
  
-                    # Simulate waiting for drivers
-                    with st.spinner("🔍 Looking for nearby drivers..."):
+                    with st.spinner("Looking for nearby drivers..."):
                         time.sleep(2.5)
  
                     st.info(
-                        "📨 Your ride request has been submitted. "
+                        "Your ride request has been submitted. "
                         "You’ll get a notification once a driver accepts your request."
                     )
  
-                    # Optionally show nearby open offers
                     offers = get_open_ride_offers()
                     nearby_matches = [
                         o for o in offers
@@ -109,7 +104,7 @@ def show():
                     ]
  
                     if nearby_matches:
-                        st.write("🚗 Meanwhile, here are some open rides on similar routes:")
+                        st.write("Meanwhile, here are some open rides on similar routes:")
                         for match in nearby_matches[:3]:
                             with st.container():
                                 st.markdown(
@@ -122,7 +117,7 @@ def show():
                             "Drivers will be notified of your request soon."
                         )
                 else:
-                    st.error("❌ Could not create ride request. Try again.")
+                    st.error("Could not create ride request. Try again.")
             else:
                 st.error("Please fill in all required fields.")
  

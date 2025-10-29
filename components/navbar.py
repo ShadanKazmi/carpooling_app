@@ -49,11 +49,11 @@ def navbar():
     current_page = query_params.get("page", ["Home"])[0]
  
     pages = {
-        "Home": "🏠 Home",
-        "Offer": "🚘 Offer Ride",
-        "Request": "📍 Request Ride",
-        "Profile": "👤 Profile",
-        "Map": "🗺️ Map"
+        "Home": "Home",
+        "Offer": "Offer Ride",
+        "Request": "Request Ride",
+        "Profile": "Profile",
+        "Map": "Map"
     }
  
     links_html = ""
@@ -64,7 +64,7 @@ def navbar():
     st.markdown(
         f"""
         <div class="navbar">
-            <h1>🚗 CarPoolConnect</h1>
+            <h1>CarPoolConnect</h1>
             <div class="nav-links">
                 {links_html}
             </div>

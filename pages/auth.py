@@ -3,13 +3,11 @@ from auth.auth_util import authenticate_user, save_user
  
 def show_auth_page():
     """Streamlit login/signup page using your auth utils."""
-    st.title("🚗 CarPoolConnect")
+    st.title("CarPoolConnect")
     st.subheader("Log in or sign up to start sharing rides")
  
-    # Tabs for login / register
-    tab1, tab2 = st.tabs(["🔑 Login", "🧾 Register"])
+    tab1, tab2 = st.tabs(["Login", "Register"])
  
-    # --- LOGIN TAB ---
     with tab1:
         st.markdown("### Existing User Login")
         email = st.text_input("Email", key="login_email")
@@ -25,7 +23,6 @@ def show_auth_page():
             else:
                 st.error("Invalid credentials or inactive account.")
  
-    # --- REGISTER TAB ---
     with tab2:
         st.markdown("### Create a New Account")
         name = st.text_input("Full Name", key="register_name")
@@ -43,7 +40,6 @@ def show_auth_page():
                 else:
                     st.error("Email already registered or an error occurred.")
  
-    # --- LOGGED IN STATE ---
     if st.session_state.get("authenticated"):
         user = st.session_state["user"]
         st.info(f"Logged in as **{user['name']} ({user['role']})**")
