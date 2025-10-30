@@ -27,7 +27,7 @@ def show_auth_page():
         name = st.text_input("Full Name", key="register_name")
         email = st.text_input("Email", key="register_email")
         password = st.text_input("Password", type="password", key="register_password")
-        role = st.selectbox("I am a...", ["passenger", "driver", "both"], key="register_role")
+        role = st.selectbox("I am a...", ["passenger", "driver"], key="register_role")
  
         if st.button("Register"):
             if not name or not email or not password:

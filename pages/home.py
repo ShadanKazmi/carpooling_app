@@ -85,7 +85,7 @@ def home():
                 <h1>🚗 CarPoolConnect</h1>
                 <p>Share rides, save money, and travel smarter across Indian cities.</p>
                 <div class="cta-buttons">
-                    <a href="?page=Request"><button>📍 Request a Ride</button></a>
+                    <a href="?page=Request"><button>Request a Ride</button></a>
                     <a href="?page=Offer"><button>Offer a Ride</button></a>
                 </div>
             </div>
@@ -118,11 +118,11 @@ def home():
         )
     
     elif page == "Request":
-        st.title("📍 Request a Ride")
+        st.title("Request a Ride")
         st.info("Request a ride page coming soon!")
     
     elif page == "Offer":
-        st.title("🚘 Offer a Ride")
+        st.title(" Offer a Ride")
         st.info("Offer a ride page coming soon!")
     
     elif page == "Rides":
