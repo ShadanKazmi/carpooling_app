@@ -1,9 +1,12 @@
 import streamlit as st
 from components.navbar import navbar
+from utils.setBackground import add_bg_from_local
 
 
 def home():
-    
+
+    add_bg_from_local("assets/image.png")
+
     navbar()
 
     query_params = st.query_params

@@ -5,9 +5,13 @@ from utils.db_connection import get_connection
 from utils.ride_utils import create_ride_request, fetch_route_cities, get_matched_ride_details
 import pymysql
 import time
+from utils.setBackground import add_bg_from_local
  
 
 def show():
+    
+    add_bg_from_local("assets/image.png")
+
     navbar()
  
     st.markdown("""
@@ -16,19 +20,19 @@ def show():
                 text-align: center;
                 font-size: 2.2rem;
                 font-weight: 700;
-                color: #1E88E5;
+                color:#000000;
                 margin-bottom: 0.2rem;
             }
             .subtitle {
                 text-align: center;
-                color: #666;
+                color: black;
                 font-size: 1rem;
                 margin-bottom: 2rem;
             }
             .section-header {
                 font-size: 1.2rem;
                 font-weight: 600;
-                color: #333;
+                color:black;
                 margin-top: 2rem;
             }
             .stButton>button {

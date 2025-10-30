@@ -7,13 +7,19 @@ from utils.ride_utils import (
     accept_ride_request,
     create_ride_offer,
     fetch_routes,
+    get_driver_assigned_rides,
     get_open_ride_requests,
     get_driver_id,
+    update_ride_status,
 )
+from utils.setBackground import add_bg_from_local
  
 
 
 def show():
+
+    # add_bg_from_local("assets/image.png")
+
     navbar()
     st.title("Offer a Ride")
     st.write("Drivers can create ride offers and view passenger ride requests here.")
@@ -87,6 +93,40 @@ def show():
                 st.success("Ride offer created successfully!")
             else:
                 st.error("Failed to create ride offer. Please try again later.")
+
+    st.markdown("---")
+    st.header("Your Assigned Rides")
+    
+    assigned_rides = get_driver_assigned_rides(driver_id)
+    
+    if not assigned_rides:
+        st.info("You have no active or booked rides at the moment.")
+    else:
+        for ride in assigned_rides:
+            with st.expander(f"Ride #{ride['ride_id']} — {ride['from_city']} → {ride['to_city']} ({ride['status']})"):
+                st.markdown(f"**Passenger:** {ride['passenger_name']}")
+                st.markdown(f"**From:** {ride['from_city']}")
+                st.markdown(f"**To:** {ride['to_city']}")
+                st.markdown(f"**Status:** {ride['status']}")
+    
+                col1, col2, col3 = st.columns(3)
+    
+                if ride["status"] == "booked":
+                    if col1.button("Start Ride", key=f"start_{ride['ride_id']}"):
+                        if update_ride_status(ride["ride_id"], "active"):
+                            st.success("Ride started successfully!")
+                            st.rerun()
+    
+                if ride["status"] == "active":
+                    if col2.button("Complete Ride", key=f"complete_{ride['ride_id']}"):
+                        if update_ride_status(ride["ride_id"], "completed"):
+                            st.success("Ride completed successfully!")
+                            st.rerun()
+    
+                    if col3.button("Cancel Ride", key=f"cancel_{ride['ride_id']}"):
+                        if update_ride_status(ride["ride_id"], "cancelled"):
+                            st.warning("Ride cancelled.")
+                            st.rerun()
  
  
 if __name__ == "__main__":
