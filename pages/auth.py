@@ -1,7 +1,6 @@
 import streamlit as st
 from auth.auth_util import authenticate_user, save_user
 from utils.setBackground import add_bg_from_local
-
 from utils.logger import log_user_action
 from auth.auth_util import authenticate_user, save_user
 
@@ -57,4 +56,3 @@ def show_auth_page():
         if st.button("Logout"):
             st.session_state.clear()
             st.success("You’ve been logged out.")
-            st.rerun()
