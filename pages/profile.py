@@ -26,10 +26,9 @@ def show():
         else:
             p = passenger[0]
             st.subheader("Passenger Profile")
-            col1, col2, col3 = st.columns(3)
+            col1, col2 = st.columns(2)
             col1.metric("Avg Rating", f"{p['avg_rating']:.1f}/5.0")
-            col2.metric("Total Rides", p['total_rides'])
-            col3.metric("Joined On", p['created_at'].strftime("%Y-%m-%d"))
+            col2.metric("Joined On", p['created_at'].strftime("%Y-%m-%d"))
     
             st.divider()
             st.subheader("📅 Ride History")

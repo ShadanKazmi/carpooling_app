@@ -1,17 +1,19 @@
 import streamlit as st
 from auth.auth_util import authenticate_user, save_user
 from scripts.logger import log_user_action
-from utils.setBackground import add_bg_from_local
  
 def show_auth_page():
-    # add_bg_from_local("assets/image.png")
+ 
+    if "auth_tab" not in st.session_state:
+        st.session_state.auth_tab = "Login"
  
     st.title("CarPoolConnect")
     st.subheader("Log in or sign up to start sharing rides")
  
-    tab1, tab2 = st.tabs(["Login", "Register"])
+    tab1, tab2 = st.tabs(["Login", "Register"] if st.session_state.auth_tab == "Login"
+                         else ["Register", "Login"])
  
-    with tab1:
+    with tab1 if st.session_state.auth_tab == "Login" else tab2:
         st.markdown("### Existing User Login")
         email = st.text_input("Email", key="login_email")
         password = st.text_input("Password", type="password", key="login_password")
@@ -27,12 +29,11 @@ def show_auth_page():
                     st.rerun()
                 else:
                     st.error("Invalid credentials or inactive account.")
-                    log_user_action("login", email, "", success=False, message="Invalid credentials or inactive user")
             except Exception as e:
                 st.error("Login failed due to a system error.")
                 log_user_action("login", email, "", success=False, message=f"Exception: {e}")
  
-    with tab2:
+    with tab2 if st.session_state.auth_tab == "Login" else tab1:
         st.markdown("### Create a New Account")
         name = st.text_input("Full Name", key="register_name")
         email = st.text_input("Email", key="register_email")
@@ -42,21 +43,28 @@ def show_auth_page():
         if st.button("Register"):
             if not name or not email or not password:
                 st.warning("Please fill out all fields.")
+            elif len(name.strip()) < 3:
+                st.warning("Name must be at least 3 characters long.")
             else:
                 try:
                     success = save_user(name, email, password, role)
                     if success:
-                        st.success("Account created successfully! You can now log in.")
+                        st.success("✅ Account created successfully! Redirecting to login...")
                         log_user_action("signup", email, role, success=True)
+ 
+                        st.session_state.auth_tab = "Login"
+                        st.rerun()
+ 
                     else:
-                        st.error("Email already registered or an error occurred.")
-                        log_user_action("signup", email, role, success=False, message="Email already exists or DB error")
+                        st.error("Email already registered or database error.")
+                        log_user_action("signup", email, role, success=False,
+                                        message="Email exists / DB error")
+ 
                 except ValueError as ve:
                     st.error(f"Registration failed: {ve}")
-                    log_user_action("signup", email, role, success=False, message=f"Validation error: {ve}")
                 except Exception as e:
-                    st.error("Unexpected error during registration.")
-                    log_user_action("signup", email, role, success=False, message=f"Exception: {e}")
+                    st.error("Unexpected error occurred.")
+                    log_user_action("signup", email, role, success=False, message=str(e))
  
     if st.session_state.get("authenticated"):
         user = st.session_state["user"]

@@ -12,11 +12,9 @@ from utils.ride_utils import (
     get_driver_id,
     update_ride_status,
 )
-from utils.setBackground import add_bg_from_local
  
  
 def show():
-    add_bg_from_local("assets/image.png")
  
     st.title("Offer a Ride")
     st.write("Drivers can create ride offers and accept passenger requests here.")

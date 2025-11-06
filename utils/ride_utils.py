@@ -306,104 +306,6 @@ def get_available_rides(from_city, to_city, date_time, passengers_count):
     conn.close()
     return rides
 
-# def book_ride(offer_id, passenger_id, seats_requested):
-#     """
-#     Book seats in an existing ride offer.
-#     """
-#     conn = get_connection()
-#     cursor = conn.cursor()
-    
-#     try:
-#         # Check availability
-#         cursor.execute("SELECT available_seats FROM ride_offers WHERE offer_id=%s AND status IN ('open','booked')", (offer_id,))
-#         offer = cursor.fetchone()
-#         if not offer or offer["available_seats"] < seats_requested:
-#             return False
-        
-#         # Update available seats
-#         new_seats = offer["available_seats"] - seats_requested
-#         new_status = "booked" if new_seats == 0 else "open"
-#         cursor.execute("UPDATE ride_offers SET available_seats=%s, status=%s WHERE offer_id=%s", (new_seats, new_status, offer_id))
-        
-#         # Insert into rides table
-#         cursor.execute("INSERT INTO rides (offer_id, passenger_id, driver_id, seats_booked, total_fare, start_time, status) "
-#                        "SELECT offer_id, %s, driver_id, %s, estimated_fare*%s, accepted_at, 'booked' FROM ride_offers WHERE offer_id=%s",
-#                        (passenger_id, seats_requested, seats_requested, offer_id))
-        
-#         conn.commit()
-#         return True
-#     except Exception as e:
-#         conn.rollback()
-#         print("Error booking ride:", e)
-#         return False
-#     finally:
-#         cursor.close()
-#         conn.close()
-
-# def book_ride(offer_id, passenger_id, seats_requested):
-#     conn = get_connection()
-#     cursor = conn.cursor(pymysql.cursors.DictCursor)
-#     try:
-#         cursor.execute("SELECT available_seats, estimated_fare, driver_id FROM ride_offers WHERE offer_id=%s", (offer_id,))
-#         offer = cursor.fetchone()
-#         if not offer or offer["available_seats"] < seats_requested:
-#             return False
- 
-#         new_seats = offer["available_seats"] - seats_requested
-#         new_status = "booked" if new_seats > 0 else "full"
- 
-#         # Update offer
-#         cursor.execute("UPDATE ride_offers SET available_seats=%s, status=%s WHERE offer_id=%s",
-#                        (new_seats, new_status, offer_id))
- 
-#         # Create ride entry
-#         total_fare = offer["estimated_fare"]
-#         cursor.execute("""
-#             INSERT INTO rides (offer_id, passenger_id, driver_id, seats_booked, total_fare, start_time, status)
-#             VALUES (%s, %s, %s, %s, %s, NOW(), 'booked')
-#         """, (offer_id, passenger_id, offer["driver_id"], seats_requested, total_fare))
- 
-#         # Update passenger’s request (mark as matched)
-#         cursor.execute("""
-#             UPDATE ride_requests SET status='matched'
-#             WHERE passenger_id=%s AND status='pending'
-#         """, (passenger_id,))
- 
-#         conn.commit()
-#         return True
-#     except Exception as e:
-#         conn.rollback()
-#         print("Error booking ride:", e)
-#         return False
-#     finally:
-#         cursor.close()
-#         conn.close()
-
-# def find_matching_offers(from_city, to_city, date_time, passengers_count):
-#     conn = get_connection()
-#     cursor = conn.cursor(pymysql.cursors.DictCursor)
-#     try:
-#         query = """
-#         SELECT ro.offer_id, ro.driver_id, ro.vehicle_no, ro.available_seats, ro.price_per_km, ro.estimated_fare,
-#                r.from_city, r.to_city, r.distance_km, u.name AS driver_name, d.avg_rating, d.total_rides
-#         FROM ride_offers ro
-#         JOIN routes r ON ro.route_id = r.route_id
-#         JOIN drivers d ON ro.driver_id = d.driver_id
-#         JOIN users u ON d.user_id = u.user_id
-#         WHERE r.from_city = %s AND r.to_city = %s
-#           AND ro.status IN ('open', 'booked')
-#           AND ro.available_seats >= %s
-#           AND DATE(ro.created_at) = DATE(%s)
-#         ORDER BY ro.estimated_fare ASC
-#         """
-#         cursor.execute(query, (from_city, to_city, passengers_count, date_time))
-#         return cursor.fetchall()
-#     except Exception as e:
-#         print("Error finding matching offers:", e)
-#         return []
-#     finally:
-#         cursor.close()
-#         conn.close()
 
 def find_matching_offers(from_city, to_city, date_time, passengers_count):
     conn = get_connection()
@@ -502,14 +404,9 @@ def save_rating_and_update_averages(
     rating_value: int,
     feedback_text: str | None
 ) -> bool:
-    """
-    Insert rating then recompute and update avg_rating/total_rides on drivers or passengers,
-    depending on who 'rated_user_id' belongs to.
-    """
     conn = get_connection()
     cur = conn.cursor(pymysql.cursors.DictCursor)
     try:
-        # 1) Insert rating
         cur.execute(
             """
             INSERT INTO ratings (ride_id, rated_by, rated_user, rating, feedback, created_at)
@@ -518,7 +415,6 @@ def save_rating_and_update_averages(
             (ride_id, rated_by_user_id, rated_user_id, rating_value, feedback_text),
         )
  
-        # 2) Recompute aggregates for rated_user_id
         cur.execute(
             "SELECT AVG(rating) AS avg_rating, COUNT(*) AS total FROM ratings WHERE rated_user=%s",
             (rated_user_id,)
@@ -527,18 +423,15 @@ def save_rating_and_update_averages(
         new_avg = float(agg["avg_rating"]) if agg["avg_rating"] is not None else 0.0
         total_count = int(agg["total"])
  
-        # 3) Figure out if rated_user_id is a driver or passenger
         cur.execute("SELECT driver_id FROM drivers WHERE user_id=%s", (rated_user_id,))
         driver_row = cur.fetchone()
  
         if driver_row:
-            # Update drivers table
             cur.execute(
                 "UPDATE drivers SET avg_rating=%s, total_rides=%s WHERE user_id=%s",
                 (new_avg, total_count, rated_user_id),
             )
         else:
-            # Update passengers table
             cur.execute(
                 "UPDATE passengers SET avg_rating=%s, total_rides=%s WHERE user_id=%s",
                 (new_avg, total_count, rated_user_id),
@@ -548,7 +441,6 @@ def save_rating_and_update_averages(
         return True
     except Exception as e:
         conn.rollback()
-        # Log on console for now; you can route to your logger if you want
         print("❌ save_rating error:", e)
         return False
     finally:
@@ -557,9 +449,6 @@ def save_rating_and_update_averages(
  
  
 def get_rides_for_driver(driver_id: int):
-    """
-    Fetch rides offered by a driver, including both parties' user_ids for rating.
-    """
     conn = get_connection()
     cur = conn.cursor(pymysql.cursors.DictCursor)
     try:
@@ -605,9 +494,6 @@ def get_rides_for_driver(driver_id: int):
  
  
 def get_rides_for_passenger(passenger_id: int):
-    """
-    Fetch rides booked by a passenger, including both parties' user_ids for rating.
-    """
     conn = get_connection()
     cur = conn.cursor(pymysql.cursors.DictCursor)
     try:

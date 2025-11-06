@@ -4,14 +4,12 @@ from utils.db_connection import get_connection
 from utils.ride_utils import create_ride_request, fetch_route_cities, get_matched_ride_details
 import pymysql
 import time
-from utils.setBackground import add_bg_from_local
  
 def show():
-    add_bg_from_local("assets/image.png")
  
     st.markdown("""
     
-    <h1 class="main-title">🚖 Request a Ride</h1>
+    <h1 class="main-title">Request a Ride</h1>
     <p class="subtitle">Find a comfortable and safe ride by sharing your trip details below.</p>
     """, unsafe_allow_html=True)
  

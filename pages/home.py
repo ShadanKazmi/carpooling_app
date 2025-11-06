@@ -1,9 +1,7 @@
 import streamlit as st
 from components.navbar import navbar
-from utils.setBackground import add_bg_from_local
  
 def home():
-    add_bg_from_local("assets/image.png")
     navbar()
  
     page = st.session_state.get("page", "Home")
@@ -74,6 +72,7 @@ def home():
  
     elif page == "Profile":
         from pages.profile import show
+        show()
  
     elif page == "Map":
         st.title("Route Map (Coming soon)")

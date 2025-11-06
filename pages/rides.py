@@ -4,11 +4,9 @@ import pymysql
 from components.navbar import navbar
 from utils.db_connection import get_connection
 from utils.ride_utils import get_driver_id as _get_driver_id, get_passenger_id_by_user, get_rides_for_driver, get_rides_for_passenger, has_user_already_rated, save_rating_and_update_averages  # keep your existing util
-from utils.setBackground import add_bg_from_local
  
 
 def show():
-    # add_bg_from_local("assets/image.png")
     st.title("My Rides")
     st.write("Track your ride history, see upcoming trips, and rate completed rides.")
  
