@@ -56,18 +56,34 @@ def fetch_route_cities():
 def create_ride_request(passenger_id, from_city, to_city, date_time, passengers_count, preferences):
     conn = get_connection()
     cursor = conn.cursor(pymysql.cursors.DictCursor)
+ 
     try:
+        cursor.execute("SELECT passenger_id FROM passengers WHERE user_id = %s", (passenger_id,))
+        passenger = cursor.fetchone()
+ 
+        if not passenger:
+            print("No matching passenger found for user_id:", passenger_id)
+            return False
+ 
+        actual_passenger_id = passenger["passenger_id"]
+ 
         query = """
-            INSERT INTO ride_requests (passenger_id, from_city, to_city, date_time, passengers_count, preferences, status, created_at)
+            INSERT INTO ride_requests
+            (passenger_id, from_city, to_city, date_time, passengers_count, preferences, status, created_at)
             VALUES (%s, %s, %s, %s, %s, %s, 'pending', %s)
         """
         cursor.execute(query, (
-            passenger_id, from_city, to_city, date_time,
-            passengers_count, json.dumps(preferences),
+            actual_passenger_id,
+            from_city,
+            to_city,
+            date_time,
+            passengers_count,
+            json.dumps(preferences),
             datetime.datetime.now()
         ))
         conn.commit()
         return True
+ 
     except Exception as e:
         print("Error creating ride request:", e)
         conn.rollback()
