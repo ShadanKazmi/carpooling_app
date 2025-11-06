@@ -1,73 +1,43 @@
+import uuid
 import streamlit as st
 import pymysql
 from components.navbar import navbar
 from utils.db_connection import get_connection
-from utils.ride_utils import get_driver_id
+from utils.ride_utils import get_driver_id as _get_driver_id, get_passenger_id_by_user, get_rides_for_driver, get_rides_for_passenger, has_user_already_rated, save_rating_and_update_averages  # keep your existing util
 from utils.setBackground import add_bg_from_local
  
- 
+
 def show():
     add_bg_from_local("assets/image.png")
     navbar()
- 
-    st.title("🚗 My Rides")
-    st.write("Track your ride history, see upcoming trips, and manage your bookings.")
+    st.title("My Rides")
+    st.write("Track your ride history, see upcoming trips, and rate completed rides.")
  
     user = st.session_state.get("user")
     if not user:
         st.warning("Please log in to view your rides.")
         st.stop()
  
-    user_id = user["user_id"]
-    role = user["role"]
- 
-    conn = get_connection()
-    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    user_id = int(user["user_id"])
+    role = str(user["role"]).lower()
  
     if role == "driver":
-        driver_id = get_driver_id(user_id)
+        driver_id = _get_driver_id(user_id)
         if not driver_id:
             st.warning("Driver profile not found. Please register as a driver.")
             st.stop()
  
-        query = """
-            SELECT
-                r.ride_id, r.status, r.seats_booked, r.total_fare,
-                r.start_time, r.end_time,
-                rr.from_city, rr.to_city, rr.date_time AS ride_date,
-                u.name AS passenger_name
-            FROM rides r
-            JOIN ride_offers ro ON r.offer_id = ro.offer_id
-            JOIN ride_requests rr ON ro.request_id = rr.request_id
-            JOIN users u ON rr.passenger_id = u.user_id
-            WHERE r.driver_id = %s
-            ORDER BY r.start_time DESC;
-        """
-        cursor.execute(query, (driver_id,))
-        rides = cursor.fetchall()
-        st.subheader("🧭 Rides You've Offered")
+        rides = get_rides_for_driver(driver_id)
+        st.subheader("Rides You've Offered")
  
     else:
-        query = """
-            SELECT
-                r.ride_id, r.status, r.seats_booked, r.total_fare,
-                r.start_time, r.end_time,
-                rr.from_city, rr.to_city, rr.date_time AS ride_date,
-                u.name AS driver_name
-            FROM rides r
-            JOIN ride_offers ro ON r.offer_id = ro.offer_id
-            JOIN ride_requests rr ON r.passenger_id = rr.passenger_id
-            JOIN drivers d ON r.driver_id = d.driver_id
-            JOIN users u ON d.user_id = u.user_id
-            WHERE r.passenger_id = %s
-            ORDER BY r.start_time DESC;
-        """
-        cursor.execute(query, (user_id,))
-        rides = cursor.fetchall()
-        st.subheader("🧳 Your Ride Bookings")
+        passenger_id = get_passenger_id_by_user(user_id)
+        if not passenger_id:
+            st.warning("Passenger profile not found. Please register as a passenger.")
+            st.stop()
  
-    cursor.close()
-    conn.close()
+        rides = get_rides_for_passenger(passenger_id)
+        st.subheader("Your Ride Bookings")
  
     if not rides:
         st.info("You have no rides yet. Book or offer a ride to get started.")
@@ -78,28 +48,67 @@ def show():
             st.markdown(
                 f"""
                 <div style="
-                    background-color:black;
-                    color:white;
-                    border-radius:15px;
-                    padding:20px;
-                    margin-bottom:20px;
-                    box-shadow:0 2px 6px rgba(0,0,0,0.2);
-                    transition:transform 0.2s ease-in-out;
-                " onmouseover="this.style.transform='scale(1.01)'"
-                  onmouseout="this.style.transform='scale(1)'">
-                    <h4 style="margin-bottom:8px;">{ride['from_city']} → {ride['to_city']}</h4>
-                    <p style="margin:5px 0;">📅 Date: {ride['ride_date']}</p>
-                    <p style="margin:5px 0;">🪑 Seats: {ride['seats_booked']}</p>
-                    <p style="margin:5px 0;">💰 Fare: ₹{ride['total_fare']}</p>
-                    <p style="margin:5px 0;">📊 Status: <b>{ride['status'].capitalize()}</b></p>
-                    <hr style="border:0;border-top:1px solid #333;">
-                    <p style="margin:5px 0;">🕒 Start: {ride['start_time'] or 'Not started'} | ⏱ End: {ride['end_time'] or 'Not ended'}</p>
+                    background-color:black; color:white; border-radius:15px;
+                    padding:20px; margin-bottom:16px; box-shadow:0 2px 6px rgba(0,0,0,0.2);
+                ">
+                    <h4 style="margin:0 0 8px 0;">{ride['from_city']} → {ride['to_city']}</h4>
+                    <p style="margin:4px 0;">Date: {ride['ride_date']}</p>
+                    <p style="margin:4px 0;">Seats: {ride['seats_booked']}</p>
+                    <p style="margin:4px 0;">Fare: ₹{ride['total_fare']}</p>
+                    <p style="margin:4px 0;">Status: <b>{ride['status'].capitalize()}</b></p>
+                    <p style="margin:4px 0;">Start: {ride['start_time'] or 'Not started'} | End: {ride['end_time'] or 'Not ended'}</p>
                 </div>
                 """,
                 unsafe_allow_html=True,
             )
  
-    st.markdown("---")
+            if ride["status"] == "completed":
+                # Who is the target of the rating?
+                if role == "driver":
+                    rated_user_id = int(ride["passenger_user_id"])
+                    subject_label = f"Rate passenger"
+                else:
+                    rated_user_id = int(ride["driver_user_id"])
+                    subject_label = f"Rate driver"
+ 
+                already = has_user_already_rated(ride_id=int(ride["ride_id"]), rated_by_user_id=user_id)
+ 
+                if not already:
+                    key_prefix = f"{role}_ride_{ride['ride_id']}_by_{user_id}"
+ 
+                    with st.form(key=f"rate_form_{key_prefix}", clear_on_submit=True):
+                        st.markdown(f"**⭐ {subject_label} for ride #{ride['ride_id']}**")
+ 
+                        rating_value = st.radio(
+                            "Your rating",
+                            options=[1, 2, 3, 4, 5],
+                            format_func=lambda x: "★" * x,
+                            horizontal=True,
+                            key=f"rating_{key_prefix}",
+                        )
+ 
+                        feedback_text = st.text_area(
+                            "Feedback (optional)",
+                            placeholder="How was your experience?",
+                            key=f"feedback_{key_prefix}",
+                        )
+ 
+                        submitted = st.form_submit_button(f"Submit rating")
+                        if submitted:
+                            ok = save_rating_and_update_averages(
+                                ride_id=int(ride["ride_id"]),
+                                rated_by_user_id=user_id,
+                                rated_user_id=rated_user_id,
+                                rating_value=int(rating_value),
+                                feedback_text=feedback_text.strip() if feedback_text else None,
+                            )
+                            if ok:
+                                st.success("Rating submitted!")
+                                st.rerun()
+                            else:
+                                st.error("Could not save rating. Please try again.")
+ 
+        st.markdown("---")
  
  
 if __name__ == "__main__":

@@ -2,7 +2,7 @@ import logging
 from datetime import datetime
 
 logging.basicConfig(
-    filename="user_activity.log",
+    filename="auth_activity.log",
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )

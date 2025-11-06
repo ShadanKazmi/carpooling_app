@@ -20,3 +20,11 @@ def get_connection():
     except pymysql.MySQLError as e:
         print("Error connecting to MySQL:", e)
         return None
+    
+def run_query(query, params=None):
+    conn = get_connection()
+    with conn.cursor() as cursor:
+        cursor.execute(query, params or ())
+        result = cursor.fetchall()
+    conn.close()
+    return result

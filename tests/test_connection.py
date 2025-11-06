@@ -13,7 +13,7 @@ def test_connection():
  
         cursor.execute("SHOW TABLES;")
         tables = cursor.fetchall()
-        print("\n📋 Tables in your database:")
+        print("\nTables in your database:")
         for t in tables:
             print("-", list(t.values())[0])
  

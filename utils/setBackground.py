@@ -1,6 +1,8 @@
 import base64
 from pathlib import Path
 import streamlit as st
+
+
 def add_bg_from_local(image_path):
         image_path = Path(image_path)
         with open(image_path, "rb") as f:

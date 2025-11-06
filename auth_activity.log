@@ -1,0 +1,106 @@
+2025-10-31 02:40:40,395 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-10-31 11:08:25,619 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-10-31 11:09:05,700 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-10-31 12:37:23,278 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 10:28:20,225 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 10:28:57,050 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-03 11:24:43,333 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 11:51:32,188 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 11:52:42,737 - INFO - SIGNUP - SUCCESS - Email: p@gmail.com - Role: passenger - 
+2025-11-03 11:52:54,923 - INFO - LOGIN - SUCCESS - Email: p@gmail.com - Role: passenger - 
+2025-11-03 12:30:05,482 - INFO - LOGIN - SUCCESS - Email: p@gmail.com - Role: passenger - 
+2025-11-03 12:30:46,119 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 12:32:44,966 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-03 14:49:35,401 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 15:38:16,689 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-03 15:38:56,292 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-03 15:39:05,454 - INFO - LOGIN - SUCCESS - Email: p@gmail.com - Role: passenger - 
+2025-11-04 11:04:20,682 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 11:04:54,092 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-04 11:09:37,285 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 11:14:30,275 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 11:38:16,684 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 11:39:48,566 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 13:19:38,668 - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-32' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py:1111> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py", line 1113, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py", line 1115, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
+2025-11-04 13:21:53,105 - INFO - SIGNUP - SUCCESS - Email: v@gmail.com - Role: passenger - 
+2025-11-04 14:39:18,273 - INFO - SIGNUP - SUCCESS - Email: shadan12@gmail.com - Role: driver - 
+2025-11-04 14:40:51,391 - INFO - SIGNUP - SUCCESS - Email: user10@gmail.com - Role: driver - 
+2025-11-04 14:54:49,816 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-04 15:45:16,584 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 11:46:40,644 - INFO - LOGIN - FAILURE - Email:  - Role:  - Invalid credentials or inactive user
+2025-11-05 12:05:03,569 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:05:15,194 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:08:42,769 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:18:39,675 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:33:25,495 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:33:50,832 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:35:38,307 - INFO - SIGNUP - SUCCESS - Email: p2@gmail.com - Role: passenger - 
+2025-11-05 12:35:48,928 - INFO - LOGIN - SUCCESS - Email: p2@gmail.com - Role: passenger - 
+2025-11-05 12:37:57,045 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:39:01,588 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:47:49,340 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:48:55,580 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:51:24,309 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:51:35,481 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:52:36,896 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:54:12,276 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 12:54:36,482 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:55:57,183 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 12:56:24,397 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 13:02:31,196 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 13:03:32,690 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 13:11:59,084 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:25:29,509 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:35:11,288 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:35:47,218 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 14:49:37,132 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:50:59,228 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 14:54:35,899 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 14:54:47,252 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:58:14,801 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 14:58:58,278 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 15:03:21,228 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 15:05:29,242 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 15:07:28,405 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 15:16:37,591 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 15:18:31,509 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 16:13:31,716 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 16:14:38,146 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-05 16:28:16,410 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 16:30:09,250 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 16:33:45,385 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:14:31,077 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:19:31,494 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:25:34,807 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:28:31,345 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:30:18,864 - INFO - LOGIN - FAILURE - Email: shadan@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-05 23:30:23,710 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:32:51,940 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:37:15,641 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:39:50,304 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:53:56,697 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-05 23:58:33,658 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:00:51,679 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:04:36,072 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:12:03,732 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:17:22,610 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:19:58,961 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:21:52,226 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:25:33,470 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:28:50,415 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 00:31:33,316 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 10:51:52,706 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 11:00:43,341 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-06 11:03:33,701 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 

@@ -14,19 +14,17 @@ from utils.ride_utils import (
 )
 from utils.setBackground import add_bg_from_local
  
-
-
+ 
 def show():
-
-    # add_bg_from_local("assets/image.png")
-
+    add_bg_from_local("assets/image.png")
     navbar()
+ 
     st.title("Offer a Ride")
-    st.write("Drivers can create ride offers and view passenger ride requests here.")
+    st.write("Drivers can create ride offers and accept passenger requests here.")
  
     user = st.session_state.get("user")
     if not user:
-        st.warning("Please log in to create or view ride offers.")
+        st.warning("Please log in to create or manage ride offers.")
         st.stop()
  
     driver_id = get_driver_id(user["user_id"])
@@ -35,11 +33,10 @@ def show():
         st.stop()
  
     st.header("Passenger Ride Requests")
- 
     requests = get_open_ride_requests()
     if requests:
         for req in requests:
-            with st.expander(f"Ride Request #{req['request_id']} — {req['from_city']} → {req['to_city']}"):
+            with st.expander(f"Request #{req['request_id']} — {req['from_city']} → {req['to_city']}"):
                 st.markdown(f"**From:** {req['from_city']}")
                 st.markdown(f"**To:** {req['to_city']}")
                 st.markdown(f"**Date & Time:** {req['date_time']}")
@@ -50,25 +47,25 @@ def show():
                 if st.button(f"Accept Request #{req['request_id']}", key=f"accept_{req['request_id']}"):
                     success = accept_ride_request(driver_id, req["request_id"])
                     if success:
-                        st.success("Ride request accepted! Passenger will be notified.")
+                        st.success("Ride request accepted successfully!")
+                        st.rerun()
                     else:
                         st.error("Failed to accept ride request.")
     else:
-        st.info("No pending ride requests right now.")
+        st.info("No active ride requests available right now.")
  
     st.markdown("---")
  
     st.header("Create a Ride Offer")
- 
     routes = fetch_routes()
     if not routes:
-        st.warning("No routes available. Please add some routes first.")
+        st.warning("No routes available. Please add routes first.")
         st.stop()
  
     with st.form("ride_offer_form"):
         st.subheader("Enter Ride Details")
         route_options = [f"{r['from_city']} → {r['to_city']} ({r['distance_km']} km)" for r in routes]
-        route_choice = st.selectbox("Route", route_options)
+        route_choice = st.selectbox("Select Route", route_options)
         vehicle_no = st.text_input("Vehicle Number", placeholder="e.g. MH12AB1234")
         available_seats = st.slider("Available Seats", 1, 6, 3)
         price_per_km = st.number_input("Price per KM (₹)", min_value=1.0, value=5.0, step=0.5)
@@ -92,41 +89,38 @@ def show():
             if success:
                 st.success("Ride offer created successfully!")
             else:
-                st.error("Failed to create ride offer. Please try again later.")
-
+                st.error("Failed to create ride offer. Try again later.")
+ 
     st.markdown("---")
+ 
     st.header("Your Assigned Rides")
-    
     assigned_rides = get_driver_assigned_rides(driver_id)
-    
     if not assigned_rides:
-        st.info("You have no active or booked rides at the moment.")
-    else:
-        for ride in assigned_rides:
-            with st.expander(f"Ride #{ride['ride_id']} — {ride['from_city']} → {ride['to_city']} ({ride['status']})"):
-                st.markdown(f"**Passenger:** {ride['passenger_name']}")
-                st.markdown(f"**From:** {ride['from_city']}")
-                st.markdown(f"**To:** {ride['to_city']}")
-                st.markdown(f"**Status:** {ride['status']}")
-    
-                col1, col2, col3 = st.columns(3)
-    
-                if ride["status"] == "booked":
-                    if col1.button("Start Ride", key=f"start_{ride['ride_id']}"):
-                        if update_ride_status(ride["ride_id"], "active"):
-                            st.success("Ride started successfully!")
-                            st.rerun()
-    
-                if ride["status"] == "active":
-                    if col2.button("Complete Ride", key=f"complete_{ride['ride_id']}"):
-                        if update_ride_status(ride["ride_id"], "completed"):
-                            st.success("Ride completed successfully!")
-                            st.rerun()
-    
-                    if col3.button("Cancel Ride", key=f"cancel_{ride['ride_id']}"):
-                        if update_ride_status(ride["ride_id"], "cancelled"):
-                            st.warning("Ride cancelled.")
-                            st.rerun()
+        st.info("No rides assigned yet.")
+        return
+ 
+    for ride in assigned_rides:
+        with st.expander(f"Ride #{ride['ride_id']} — {ride['from_city']} → {ride['to_city']} ({ride['status']})"):
+            st.markdown(f"**Passenger:** {ride['passenger_name']}")
+            st.markdown(f"**From:** {ride['from_city']}")
+            st.markdown(f"**To:** {ride['to_city']}")
+            st.markdown(f"**Status:** {ride['status'].capitalize()}")
+ 
+            col1, col2, col3 = st.columns(3)
+            if ride["status"] == "booked":
+                if col1.button("Start Ride", key=f"start_{ride['ride_id']}"):
+                    if update_ride_status(ride["ride_id"], "active"):
+                        st.success("Ride started successfully!")
+                        st.rerun()
+            elif ride["status"] == "active":
+                if col2.button("Complete Ride", key=f"complete_{ride['ride_id']}"):
+                    if update_ride_status(ride["ride_id"], "completed"):
+                        st.success("Ride completed successfully!")
+                        st.rerun()
+            if col3.button("Cancel Ride", key=f"cancel_{ride['ride_id']}"):
+                if update_ride_status(ride["ride_id"], "cancelled"):
+                    st.warning("Ride cancelled.")
+                    st.rerun()
  
  
 if __name__ == "__main__":
