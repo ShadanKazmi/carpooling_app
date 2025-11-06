@@ -8,8 +8,7 @@ from utils.setBackground import add_bg_from_local
  
 
 def show():
-    add_bg_from_local("assets/image.png")
-    navbar()
+    # add_bg_from_local("assets/image.png")
     st.title("My Rides")
     st.write("Track your ride history, see upcoming trips, and rate completed rides.")
  

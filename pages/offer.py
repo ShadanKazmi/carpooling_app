@@ -17,7 +17,6 @@ from utils.setBackground import add_bg_from_local
  
 def show():
     add_bg_from_local("assets/image.png")
-    navbar()
  
     st.title("Offer a Ride")
     st.write("Drivers can create ride offers and accept passenger requests here.")
