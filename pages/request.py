@@ -1,12 +1,13 @@
 import streamlit as st
 from datetime import datetime
+from components.navbar import navbar
 from utils.db_connection import get_connection
 from utils.ride_utils import create_ride_request, fetch_route_cities, get_matched_ride_details
 import pymysql
 import time
  
 def show():
- 
+
     st.markdown("""
     
     <h1 class="main-title">Request a Ride</h1>

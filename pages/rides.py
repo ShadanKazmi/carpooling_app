@@ -60,7 +60,6 @@ def show():
             )
  
             if ride["status"] == "completed":
-                # Who is the target of the rating?
                 if role == "driver":
                     rated_user_id = int(ride["passenger_user_id"])
                     subject_label = f"Rate passenger"

@@ -3,7 +3,7 @@ import json
 import pymysql
 import streamlit as st
 from utils.db_connection import get_connection
- 
+
  
 def get_driver_id(user_id):
     conn = get_connection()
@@ -51,7 +51,33 @@ def fetch_route_cities():
     finally:
         cursor.close()
         conn.close()
+
  
+def get_route_coordinates(route_id):
+    conn = get_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+ 
+    cursor.execute("SELECT coordinates FROM routes WHERE route_id=%s", (route_id,))
+    row = cursor.fetchone()
+ 
+    cursor.close()
+    conn.close()
+ 
+    if not row or not row["coordinates"]:
+        return []
+ 
+    coords = row["coordinates"]
+ 
+    if isinstance(coords, str):
+        coords = json.loads(coords)
+ 
+    formatted = []
+    for pair in coords:
+        if isinstance(pair, list) and len(pair) == 2:
+            lon, lat = pair
+            formatted.append({"lat": float(lat), "lon": float(lon)})
+ 
+    return formatted
  
 def create_ride_request(passenger_id, from_city, to_city, date_time, passengers_count, preferences):
     conn = get_connection()
@@ -536,4 +562,30 @@ def get_rides_for_passenger(passenger_id: int):
     finally:
         cur.close()
         conn.close()
+
+def update_ride_position(ride_id, new_index):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("UPDATE rides SET current_position_index=%s WHERE ride_id=%s", (new_index, ride_id))
+    conn.commit()
+    cursor.close()
+    conn.close()
  
+ 
+def get_active_ride(user_id):
+    conn = get_connection()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+ 
+    cursor.execute("""
+        SELECT r.ride_id, r.current_position_index, ro.route_id
+        FROM rides r
+        JOIN ride_offers ro ON r.offer_id = ro.offer_id
+        WHERE (r.passenger_id=%s OR r.driver_id=(SELECT driver_id FROM drivers WHERE user_id=%s))
+        AND r.status='active'
+        LIMIT 1
+    """, (user_id, user_id))
+ 
+    ride = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    return ride
