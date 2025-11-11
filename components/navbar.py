@@ -1,38 +1,48 @@
 import streamlit as st
+from utils.db_connection import get_connection
+from utils.ride_utils import get_driver_id
+ 
+def _get_unread_notification_count(user_id: int) -> int:
+    try:
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute(
+            "SELECT COUNT(*) AS unread_count FROM notifications WHERE user_id=%s AND is_read=0",
+            (user_id,)
+        )
+        row = cursor.fetchone()
+        cursor.close()
+        conn.close()
+        if not row:
+            return 0
+        count = row[0]
+        return int(count) if count is not None else 0
+    except Exception:
+        return 0
  
 def navbar():
     if "page" not in st.session_state:
         st.session_state.page = "Home"
  
-    pages = ["Home", "Request", "Offer", "Rides", "Profile", "Map"]
-    
-    st.markdown("""
-        <style>
-            .nav-container {
-                display: flex;
-                gap: 1.5rem;
-                background: #0f172a;
-                padding: 1rem 2rem;
-                border-radius: 12px;
-                margin-bottom: 2rem;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            }
-            .nav-button {
-                color: #e2e8f0;
-                font-weight: 500;
-                cursor: pointer;
-            }
-            .nav-active {
-                color: #22d3ee;
-                border-bottom: 2px solid #22d3ee;
-                padding-bottom: 3px;
-                font-weight: 700;
-            }
-        </style>
-    """, unsafe_allow_html=True)
+    user = st.session_state.get("user")
+    driver_id = get_driver_id(user["user_id"])
  
-    cols = st.columns(len(pages)+2)
+    unread_count = _get_unread_notification_count(user["user_id"]) if user else 0
+
+    if driver_id:
+        pages = ["Home", "Offer", "Rides", "Notifications", "Profile", "Map"]
+    else:
+        pages = ["Home", "Request", "Rides", "Notifications", "Profile", "Map"]
+ 
+    cols = st.columns(len(pages))
     for i, page in enumerate(pages):
-        if cols[i].button(page, key=f"nav_{page}"):
+        label = page
+        if page == "Notifications":
+            if unread_count > 0:
+                label = f"🔔 Notifications ({unread_count})"
+            else:
+                label = "🔔 Notifications"
+ 
+        if cols[i].button(label, key=f"nav_{i}_{page}"):
             st.session_state.page = page
             st.rerun()

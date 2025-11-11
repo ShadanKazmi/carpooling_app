@@ -1,7 +1,7 @@
 import re
-import pymysql
 import bcrypt
 import datetime
+import pymysql
 from utils.db_connection import get_connection
  
 def get_cursor():

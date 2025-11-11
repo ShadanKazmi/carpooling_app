@@ -73,6 +73,10 @@ def home():
     elif page == "Profile":
         from pages.profile import show
         show()
+
+    elif page == "Notifications":
+        from pages.notifications import show
+        show()
  
     elif page == "Map":
         st.title("Route Map (Coming soon)")

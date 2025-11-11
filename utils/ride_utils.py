@@ -472,96 +472,54 @@ def save_rating_and_update_averages(
     finally:
         cur.close()
         conn.close()
- 
- 
-def get_rides_for_driver(driver_id: int):
+
+
+def get_rides_for_driver(driver_id):
     conn = get_connection()
-    cur = conn.cursor(pymysql.cursors.DictCursor)
-    try:
-        cur.execute(
-            """
-            SELECT
-                r.ride_id,
-                r.status,
-                r.seats_booked,
-                r.total_fare,
-                r.start_time,
-                r.end_time,
-                rr.from_city,
-                rr.to_city,
-                rr.date_time AS ride_date,
- 
-                -- passenger side
-                u_p.name AS passenger_name,
-                u_p.user_id AS passenger_user_id,
- 
-                -- driver side
-                u_d.user_id AS driver_user_id
- 
-            FROM rides r
-            JOIN ride_offers ro ON r.offer_id = ro.offer_id
-            JOIN ride_requests rr ON ro.request_id = rr.request_id
- 
-            JOIN drivers d ON r.driver_id = d.driver_id
-            JOIN users   u_d ON d.user_id = u_d.user_id
- 
-            JOIN passengers p ON rr.passenger_id = p.passenger_id
-            JOIN users      u_p ON p.user_id = u_p.user_id
- 
-            WHERE r.driver_id = %s
-            ORDER BY COALESCE(r.start_time, rr.date_time) DESC, r.ride_id DESC
-            """,
-            (driver_id,),
-        )
-        return cur.fetchall()
-    finally:
-        cur.close()
-        conn.close()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    query = """
+        SELECT r.ride_id, r.status, r.seats_booked, r.total_fare,
+               r.start_time, r.end_time,
+               rr.from_city, rr.to_city, rr.date_time AS ride_date,
+               u.name AS passenger_name, u.user_id AS passenger_user_id,
+               ro.vehicle_no
+        FROM rides r
+        JOIN ride_offers ro ON r.offer_id = ro.offer_id
+        JOIN ride_requests rr ON ro.request_id = rr.request_id
+        JOIN users u ON rr.passenger_id = u.user_id
+        WHERE r.driver_id = %s
+        ORDER BY r.start_time DESC;
+    """
+    cursor.execute(query, (driver_id,))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return data
  
  
-def get_rides_for_passenger(passenger_id: int):
+def get_rides_for_passenger(passenger_id):
     conn = get_connection()
-    cur = conn.cursor(pymysql.cursors.DictCursor)
-    try:
-        cur.execute(
-            """
-            SELECT
-                r.ride_id,
-                r.status,
-                r.seats_booked,
-                r.total_fare,
-                r.start_time,
-                r.end_time,
-                rr.from_city,
-                rr.to_city,
-                rr.date_time AS ride_date,
- 
-                -- driver side
-                u_d.name   AS driver_name,
-                u_d.user_id AS driver_user_id,
- 
-                -- passenger side
-                u_p.user_id AS passenger_user_id
- 
-            FROM rides r
-            JOIN ride_offers ro ON r.offer_id = ro.offer_id
-            JOIN ride_requests rr ON ro.request_id = rr.request_id
- 
-            JOIN drivers d ON r.driver_id = d.driver_id
-            JOIN users   u_d ON d.user_id = u_d.user_id
- 
-            JOIN passengers p ON r.passenger_id = p.passenger_id
-            JOIN users      u_p ON p.user_id = u_p.user_id
- 
-            WHERE r.passenger_id = %s
-            ORDER BY COALESCE(r.start_time, rr.date_time) DESC, r.ride_id DESC
-            """,
-            (passenger_id,),
-        )
-        return cur.fetchall()
-    finally:
-        cur.close()
-        conn.close()
+    cursor = conn.cursor(pymysql.cursors.DictCursor)
+    query = """
+        SELECT r.ride_id, r.status, r.seats_booked, r.total_fare,
+               r.start_time, r.end_time,
+               rr.from_city, rr.to_city, rr.date_time AS ride_date,
+               ud.name AS driver_name, ud.user_id AS driver_user_id,
+               ro.vehicle_no
+        FROM rides r
+        JOIN ride_offers ro ON r.offer_id = ro.offer_id
+        JOIN drivers d ON r.driver_id = d.driver_id
+        JOIN users ud ON d.user_id = ud.user_id
+        JOIN ride_requests rr ON r.passenger_id = rr.passenger_id
+        WHERE r.passenger_id = %s
+        ORDER BY r.start_time DESC;
+    """
+    cursor.execute(query, (passenger_id,))
+    data = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    return data
+
 
 def update_ride_position(ride_id, new_index):
     conn = get_connection()
@@ -589,3 +547,31 @@ def get_active_ride(user_id):
     cursor.close()
     conn.close()
     return ride
+
+def notify_user(user_id, message):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        INSERT INTO notifications (user_id, message)
+        VALUES (%s, %s)
+    """, (user_id, message))
+    conn.commit()
+    cursor.close()
+    conn.close()
+
+def get_unread_notification_count(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT COUNT(*) AS unread_count FROM notifications WHERE user_id=%s AND is_read=0",
+        (user_id,)
+    )
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+ 
+    if not row:
+        return 0
+ 
+    count = row[0]
+    return count if count is not None else 0
