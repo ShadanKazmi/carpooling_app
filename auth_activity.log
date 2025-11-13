@@ -184,3 +184,10 @@ tornado.websocket.WebSocketClosedError
 2025-11-11 11:03:32,388 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
 2025-11-11 11:04:20,254 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
 2025-11-11 11:16:59,683 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-11 15:39:42,896 - INFO - SIGNUP - FAILURE - Email: ,aditya@gmail.com - Role: passenger - Validation error: Invalid email address
+2025-11-11 15:40:12,266 - INFO - SIGNUP - FAILURE - Email: Aditya@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-11 15:40:45,670 - INFO - SIGNUP - FAILURE - Email: aditya@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-11 15:41:03,623 - INFO - LOGIN - SUCCESS - Email: aditya@gmail.com - Role: driver - 
+2025-11-11 15:47:44,740 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-12 11:12:32,538 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-12 11:12:59,823 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
