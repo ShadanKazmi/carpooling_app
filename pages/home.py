@@ -79,7 +79,8 @@ def home():
         show()
  
     elif page == "Map":
-        st.title("Route Map (Coming soon)")
+        from pages.ride import show
+        show()
  
     else:
         st.error("Page not found.")

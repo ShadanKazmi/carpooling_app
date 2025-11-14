@@ -700,3 +700,38 @@ def create_notification(user_id, message):
     finally:
         cursor.close()
         conn.close()
+
+def log_incident(ride_id, user_id, incident_type, description, severity="low"):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO ride_incidents
+            (ride_id, reported_by, incident_type, description, severity, created_at)
+            VALUES (%s, %s, %s, %s, %s, NOW())
+        """, (ride_id, user_id, incident_type, description, severity))
+        conn.commit()
+    except Exception as e:
+        print("log_incident error:", e)
+        conn.rollback()
+    finally:
+        cur.close()
+        conn.close()
+ 
+ 
+def create_user_report(reported_by, reported_user, ride_id, category, description):
+    conn = get_connection()
+    cur = conn.cursor()
+    try:
+        cur.execute("""
+            INSERT INTO user_reports
+            (reported_by, reported_user, ride_id, category, description, status, created_at)
+            VALUES (%s, %s, %s, %s, %s, 'open', NOW())
+        """, (reported_by, reported_user, ride_id, category, description))
+        conn.commit()
+    except Exception as e:
+        print("create_user_report error:", e)
+        conn.rollback()
+    finally:
+        cur.close()
+        conn.close()
