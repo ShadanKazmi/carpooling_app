@@ -575,3 +575,128 @@ def get_unread_notification_count(user_id):
  
     count = row[0]
     return count if count is not None else 0
+
+def fetch_active_rides():
+    """Return list of active rides (status 'active' or 'booked' if you consider those active)."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = """
+        SELECT r.ride_id, r.offer_id, r.passenger_id, r.driver_id, r.start_time, r.end_time,
+               r.current_position_index, r.status,
+               rr.from_city, rr.to_city, u.name AS passenger_name, d.user_id as driver_user_id
+        FROM rides r
+        LEFT JOIN ride_offers ro ON r.offer_id = ro.offer_id
+        LEFT JOIN ride_requests rr ON ro.request_id = rr.request_id
+        LEFT JOIN passengers p ON r.passenger_id = p.passenger_id
+        LEFT JOIN users u ON p.user_id = u.user_id
+        LEFT JOIN drivers dr ON r.driver_id = dr.driver_id
+        LEFT JOIN users d ON dr.user_id = d.user_id
+        WHERE r.status IN ('booked','active')
+        ORDER BY r.start_time DESC
+    """
+    cursor.execute(query)
+    rows = cursor.fetchall()
+    cursor.close()
+    conn.close()
+    results = []
+    for r in rows:
+        if isinstance(r, dict):
+            results.append(r)
+        else:
+            pass
+    if not results and rows:
+        conn = get_connection()
+        cursor = conn.cursor(pymysql.cursors.DictCursor)
+        cursor.execute(query)
+        results = cursor.fetchall()
+        cursor.close()
+        conn.close()
+    return results
+ 
+def get_route_coordinates_for_ride(ride):
+    """
+    Get coordinates list for ride's route from routes.coordinates (JSON).
+    Coordinates are stored as list of objects with lon,lat or [lon,lat].
+    Return list of dicts: [{'lon':..., 'lat': ...}, ...]
+    """
+    conn = get_connection()
+    cursor = conn.cursor()
+    query = """
+        SELECT rt.coordinates
+        FROM rides r
+        JOIN ride_offers ro ON r.offer_id = ro.offer_id
+        JOIN routes rt ON ro.route_id = rt.route_id
+        WHERE r.ride_id = %s
+        LIMIT 1
+    """
+    cursor.execute(query, (ride['ride_id'],))
+    row = cursor.fetchone()
+    cursor.close()
+    conn.close()
+    if not row:
+        return None
+    coords_raw = row[0] if isinstance(row, tuple) else row.get('coordinates') or row.get('coordinates'.encode())
+    if not coords_raw:
+        return None
+    if isinstance(coords_raw, (bytes, bytearray)):
+        coords_raw = coords_raw.decode()
+    if isinstance(coords_raw, str):
+        try:
+            coords = json.loads(coords_raw)
+        except Exception:
+            return None
+    else:
+        coords = coords_raw
+    normalized = []
+    for pt in coords:
+        try:
+            if isinstance(pt, dict):
+                lon = pt.get('lon') or pt.get('lng') or pt.get('longitude')
+                lat = pt.get('lat') or pt.get('latitude')
+                if lon is None or lat is None:
+                    for k, v in pt.items():
+                        if k.lower() in ('lon','lng','longitude'):
+                            lon = v
+                        if k.lower() in ('lat','latitude'):
+                            lat = v
+                lon_f = float(lon)
+                lat_f = float(lat)
+                normalized.append({'lon': lon_f, 'lat': lat_f})
+            elif isinstance(pt, (list, tuple)):
+                lon_f = float(pt[0])
+                lat_f = float(pt[1])
+                normalized.append({'lon': lon_f, 'lat': lat_f})
+            else:
+                continue
+        except Exception:
+            continue
+    return normalized if normalized else None
+ 
+def update_ride_position_index(ride_id, new_index):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("UPDATE rides SET current_position_index=%s WHERE ride_id=%s", (new_index, ride_id))
+        conn.commit()
+        success = True
+    except Exception as e:
+        print("update_ride_position_index error:", e)
+        conn.rollback()
+        success = False
+    finally:
+        cursor.close()
+        conn.close()
+    return success
+ 
+def create_notification(user_id, message):
+    conn = get_connection()
+    cursor = conn.cursor()
+    try:
+        cursor.execute("INSERT INTO notifications (user_id, message, is_read, created_at) VALUES (%s, %s, 0, NOW())", (user_id, message))
+        conn.commit()
+    except Exception as e:
+        print("create_notification error:", e)
+        conn.rollback()
+    finally:
+        cursor.close()
+        conn.close()

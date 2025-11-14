@@ -191,3 +191,28 @@ tornado.websocket.WebSocketClosedError
 2025-11-11 15:47:44,740 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
 2025-11-12 11:12:32,538 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
 2025-11-12 11:12:59,823 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-13 11:33:50,358 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-13 12:22:41,616 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-13 12:29:40,640 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-13 12:29:58,723 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-13 12:33:47,859 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-13 12:34:07,451 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-14 11:08:38,393 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-14 11:19:20,678 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-14 11:29:39,682 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-14 11:38:37,059 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-14 11:55:23,485 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-14 12:08:19,816 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
+2025-11-14 12:31:28,230 - ERROR - Task exception was never retrieved
+future: <Task finished name='Task-39' coro=<WebSocketProtocol13.write_message.<locals>.wrapper() done, defined at C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py:1111> exception=WebSocketClosedError()>
+Traceback (most recent call last):
+  File "C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py", line 1113, in wrapper
+    await fut
+tornado.iostream.StreamClosedError: Stream is closed
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py", line 1115, in wrapper
+    raise WebSocketClosedError()
+tornado.websocket.WebSocketClosedError
