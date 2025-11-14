@@ -227,3 +227,5 @@ tornado.websocket.WebSocketClosedError
 2025-11-14 15:54:03,704 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
 2025-11-14 15:55:18,297 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
 2025-11-14 16:14:04,373 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-14 16:39:04,761 - INFO - LOGIN - SUCCESS - Email: shadan@gmail.com - Role: passenger - 
+2025-11-14 16:39:15,548 - INFO - LOGIN - SUCCESS - Email: driver@gmail.com - Role: driver - 
