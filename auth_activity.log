@@ -216,3 +216,38 @@ Traceback (most recent call last):
   File "C:\Users\shadan.kazmi\carpooling_app\.venv\Lib\site-packages\tornado\websocket.py", line 1115, in wrapper
     raise WebSocketClosedError()
 tornado.websocket.WebSocketClosedError
+2025-11-14 15:57:10,209 - INFO - SIGNUP - FAILURE - Email: rounit@gmail.com - Role: passenger - Validation error: Password must be at least 8 characters long, contain 1 uppercase, 1 lowercase, and 1 number
+2025-11-14 15:57:22,528 - INFO - SIGNUP - FAILURE - Email: rounit@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-14 15:57:34,420 - INFO - SIGNUP - FAILURE - Email: rounit123@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-14 15:57:51,170 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:52,374 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:52,580 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:52,795 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:52,959 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:53,103 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 15:57:53,374 - INFO - LOGIN - FAILURE - Email: rounit123@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 18:46:07,813 - INFO - LOGIN - FAILURE - Email: adityaharmakallar@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-14 18:46:26,331 - INFO - SIGNUP - FAILURE - Email: aditya@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-14 18:46:33,425 - INFO - SIGNUP - FAILURE - Email: aditya11@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-14 18:46:50,353 - INFO - LOGIN - FAILURE - Email: aditya11@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 12:29:47,528 - INFO - SIGNUP - FAILURE - Email: shadan@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-17 12:30:00,085 - INFO - SIGNUP - FAILURE - Email: shadan2@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-17 12:30:27,110 - INFO - LOGIN - FAILURE - Email: shadan2@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 12:31:38,562 - INFO - SIGNUP - FAILURE - Email: shadan@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-17 12:31:43,363 - INFO - SIGNUP - FAILURE - Email: shadan2@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-17 12:32:30,940 - INFO - SIGNUP - FAILURE - Email: shadan2@gmail.com - Role: passenger - Email already exists or DB error
+2025-11-17 12:32:59,784 - INFO - SIGNUP - SUCCESS - Email: shadan2@gmail.com - Role: passenger - 
+2025-11-17 12:33:15,108 - INFO - LOGIN - FAILURE - Email: shadan2@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 12:33:28,959 - INFO - LOGIN - SUCCESS - Email: shadan2@gmail.com - Role: passenger - 
+2025-11-17 12:41:42,097 - INFO - LOGIN - SUCCESS - Email: shadan2@gmail.com - Role: passenger - 
+2025-11-17 12:43:30,543 - INFO - LOGIN - SUCCESS - Email: shadan2@gmail.com - Role: passenger - 
+2025-11-17 14:30:22,303 - INFO - LOGIN - FAILURE - Email: shadankajmi2@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 16:10:30,427 - INFO - SIGNUP - SUCCESS - Email: Manojbaheti@gmail.com - Role: driver - 
+2025-11-17 16:10:41,452 - INFO - LOGIN - SUCCESS - Email: Manojbaheti@gmail.com - Role: driver - 
+2025-11-17 16:12:45,845 - INFO - LOGIN - SUCCESS - Email: shadan2@gmail.com - Role: passenger - 
+2025-11-17 16:35:17,913 - INFO - PASSWORD_RESET - SUCCESS - Email: Manojbaheti@gmail.com - Role:  - 
+2025-11-17 16:35:29,243 - INFO - LOGIN - FAILURE - Email: Manojbaheti@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 16:35:33,219 - INFO - LOGIN - SUCCESS - Email: Manojbaheti@gmail.com - Role: driver - 
+2025-11-17 16:42:07,338 - INFO - PASSWORD_RESET - SUCCESS - Email: Manojbaheti@gmail.com - Role:  - 
+2025-11-17 16:42:24,960 - INFO - LOGIN - FAILURE - Email: Manojbaheti@gmail.com - Role:  - Invalid credentials or inactive user
+2025-11-17 16:42:29,889 - INFO - LOGIN - SUCCESS - Email: Manojbaheti@gmail.com - Role: driver - 

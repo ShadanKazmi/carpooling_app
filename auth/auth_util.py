@@ -95,3 +95,46 @@ def update_last_login(user_id: int):
     cursor.execute("UPDATE users SET updated_at = %s WHERE user_id = %s", (now, user_id))
     conn.commit()
     conn.close()
+
+def get_user_by_email(email: str):
+    conn, cursor = get_cursor()
+    if not conn or not cursor:
+        return None
+    cursor.execute("SELECT user_id, name, email FROM users WHERE email = %s", (email,))
+    user = cursor.fetchone()
+    conn.close()
+    return user
+
+def reset_password(email: str, new_password: str) -> bool:
+    if not is_valid_email(email):
+        raise ValueError("Invalid email address")
+    
+    if not is_valid_password(new_password):
+        raise ValueError("Password must be at least 8 characters long, "
+                         "contain 1 uppercase, 1 lowercase, and 1 number")
+    
+    conn, cursor = get_cursor()
+    if not conn or not cursor:
+        return False
+    
+    hashed_pw = hash_password(new_password)
+    now = datetime.datetime.now()
+    
+    try:
+        cursor.execute("SELECT user_id FROM users WHERE email = %s", (email,))
+        user = cursor.fetchone()
+        
+        if not user:
+            conn.close()
+            return False
+        
+        cursor.execute("""
+            UPDATE users SET password = %s, updated_at = %s WHERE email = %s
+        """, (hashed_pw, now, email))
+        conn.commit()
+        return True
+    except Exception:
+        conn.rollback()
+        return False
+    finally:
+        conn.close()
